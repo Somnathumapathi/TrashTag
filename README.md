@@ -1,1 +1,1 @@
-"# TrashTag" 
+# TrashTag
