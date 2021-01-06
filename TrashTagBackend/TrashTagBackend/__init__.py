@@ -13,9 +13,13 @@ def create_app(config_class=Config):
 
 	#Import all your blueprints
 	from TrashTagBackend.main.routes import main
+	from TrashTagBackend.distributor.routes import distributor
+	from TrashTagBackend.producer.routes import producer
 	
 	#use the url_prefix arguement if you need prefixes for the routes in the blueprint
 	app.register_blueprint(main)
+	app.register_blueprint(distributor, url_prefix='/distributor')
+	app.register_blueprint(producer, url_prefix='/producer')
 
 	return app
 
