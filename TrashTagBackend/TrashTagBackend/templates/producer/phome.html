@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="container p-5">
+	<h1 class="display-1">Producer</h1>
+	<div class="d-flex">
+		<a href={{url_for('producer.logout')}} class="btn btn-danger mx-1">Logout</a>
+		<button class="btn btn-success">Commission New Dustbin</button>
+	</div>
+</div>
+{% endblock content %}

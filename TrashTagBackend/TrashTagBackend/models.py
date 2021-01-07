@@ -2,6 +2,8 @@
 from datetime import datetime
 from flask import current_app
 from TrashTagBackend import db
+import string
+import random as rnd
 
 #https://pypi.org/project/flask-googlemaps/
 
@@ -21,6 +23,18 @@ class LocationModel(db.Model):
 	def __repr__(self):
 		return f"Location({self.name}->({self.lat},{self.lng})"
 
+class UserModel(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String)
+	username = db.Column(db.String)
+	password = db.Column(db.String)
+	coins = db.Column(db.Integer, default=0)
+	disposed_products = db.relationship('Product', backref='disposer')
+
+	def __init__(self, uname, pwd):
+		self.name = name
+		self.username = uname
+		self.password = pwd
 
 class DistributorModel(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -28,9 +42,16 @@ class DistributorModel(db.Model):
 	distributorkey = db.Column(db.String) #CustomStringKey
 	dustbins = db.relationship('Dustbin', backref='distributor')
 
-	def __init__(self, name):
+	username = db.Column(db.String)
+	password = db.Column(db.String)
+
+	def __init__(self, name, uname, pwd):
+		cset = string.ascii_uppercase+string.ascii_lowercase+string.digits
 		self.name = name
-		self.distributorkey = distributorkey
+		self.username = uname
+		self.password = pwd
+		self.distributorkey = ''.join([rnd.choice(cset) for _ in range(10)])
+
 
 	def __repr__(self):
 		return f"Distributor({self.name})"
@@ -41,9 +62,15 @@ class ProducerModel(db.Model):
 	producerkey = db.Column(db.String) #CustomStringKey
 	products = db.relationship('Product', backref='producer')
 
-	def __init__(self, name):
+	username = db.Column(db.String)
+	password = db.Column(db.String)
+
+	def __init__(self, name, uname, pwd):
+		cset = string.ascii_uppercase+string.ascii_lowercase+string.digits
 		self.name = name
-		self.producerkey = producerkey
+		self.username = uname
+		self.password = pwd
+		self.producerkey = ''.join([rnd.choice(cset) for _ in range(10)])
 
 	def __repr__(self):
 		return f"Producer({self.name})"
@@ -58,12 +85,21 @@ class Product(db.Model):
 	producer_id = db.Column(db.Integer, db.ForeignKey('producer_model.id'))
 	dustbin_id = db.Column(db.Integer, db.ForeignKey('dustbin.id'))
 
-	def __init__(self, name, isbiodegradable, productkey, waste_type, prod):
+	disposer_id = db.Column(db.Integer, db.ForeignKey('user_model.id'))
+
+	def __init__(self, name, isbiodegradable, productkey, waste_type, producer):
 		self.name = name
 		self.is_biodegradable = isbiodegradable
 		self.productkey = productkey
 		self.waste_type = waste_type
-		prod.products.append(self)
+		producer.products.append(self)
+
+	def add2dustbin(self, dustbin):
+		dustbin.contents.append(self)
+
+	@property
+	def is_disposed(self):
+		return True if(self.dustbin_id) else False
 
 	def __repr__(self):
 		return f"Product({self.name}, {self.owner})"
