@@ -4,6 +4,7 @@ ac = app.app_context()
 from TrashTagBackend.models import LocationModel, Dustbin, Product, ProducerModel, DistributorModel
 
 with ac:
+	pass
 	#Locations
 	# l1 = LocationModel('Imversion', 12.943824027778026, 77.58483989525608)
 	# l2 = LocationModel('MyCaptain', 12.917735223808648, 77.6267522971101)
