@@ -4,8 +4,73 @@
 	<h1 class="display-1">Distributor</h1>
 	<div class="d-flex">
 		<a href={{url_for('distributor.logout')}} class="btn btn-danger mx-1">Logout</a>
-		<button class="btn btn-success">Commission New Dustbin</button>
+		<button class="btn btn-success" data-toggle="modal" data-target="#newDustbinDialog">Commission New Dustbin</button>
 	</div>
 	
+<!-- Modal -->
+<div class="modal fade" id="newDustbinDialog" tabindex="-1" role="dialog" aria-labelledby="newDustbinDialogTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="newDustbinDialogTitle">Commission new Dustbin</h5>
+        <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+			<input type="text" class="form-control" placeholder="Dustbin Name" id="dbn">
+			
+			<select name="dtype" id="dtyp" class="form-control mt-1">
+				<option value="dry">Dry Waste</option>
+				<option value="wet">Wet Waste</option>
+				<option value="rec">Recyclable Waste</option>
+			</select>
+
+			<div class="d-flex mt-2">
+			
+				<input type="text" class="form-control" id="lat" readonly>
+				<input type="text" class="form-control mx-1" id="lng" readonly>
+				
+			</div>
+
+			<div class="modal-footer">
+				<div class="btn-primary p-2" onclick="getLoc()">Get Location</div>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-success" onclick="commission()">Commission</button>
+			</div>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 {% endblock content %}
+
+{% block js %}
+<script>
+const getLoc = () => {
+	navigator.geolocation.getCurrentPosition((pos) => {
+		let lat = pos.coords.latitude
+		let lng = pos.coords.longitude
+		console.log(lat, lng)
+		document.getElementById("lat").value = lat
+		document.getElementById("lng").value = lng
+	})
+}
+
+const commission = () => {
+	fd = new FormData();
+	fd.append('dname', document.getElementById("dbn").value)
+	fd.append('dtype', document.getElementById("dtyp").value)
+	fd.append('lat', document.getElementById("lat").value)
+	fd.append('lng', document.getElementById("lng").value)
+	fetch(window.location.href, {
+		method:'POST',
+		body: fd
+	}).then((res)=>res.json()).then((res)=>{
+		newloc = window.location.href + `qrviewer/${res.qrkey}`
+		console.log(newloc)
+		window.location.href = (newloc);
+	})
+}
+</script>
+{% endblock js %}

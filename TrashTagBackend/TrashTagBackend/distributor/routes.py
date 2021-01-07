@@ -1,14 +1,34 @@
-from flask import render_template, request, Blueprint, session, redirect, url_for, flash
+from flask import render_template, request, Blueprint, session, redirect, url_for, flash, jsonify
 from TrashTagBackend.distributor.forms import *
 from TrashTagBackend.models import *
+from TrashTagBackend import db, qr
 
 distributor = Blueprint('distributor', __name__)
 
-@distributor.route("/")
+@distributor.route("/",methods=['GET', 'POST'])
 def home():
 	if(not session.get('d_uname') or not session.get('d_pass')):
 		flash('Please Login to Access', 'info')
 		return redirect(url_for('distributor.login', next='distributor.home'))
+
+	dist = DistributorModel.query.filter_by(username=session['d_uname']).first()
+	
+	if(request.method=='POST'):
+		data = request.form
+		loc = LocationModel(f"Dustbin<{data['dname']}>", data['lat'], data['lng'])
+
+		if(LocationModel.query.filter_by(lat=data['lat'], lng=data['lng']).first()):
+			loc = LocationModel.query.filter_by(lat=data['lat'], lng=data['lng']).first()
+
+		d = Dustbin(
+			name=data['dname'],
+			dustbin_type=data['dtype'],
+			location=loc,
+			distributor=dist
+		)
+		db.session.add(d)
+		db.session.commit()
+		return jsonify({'qrkey':d.dustbinkey})
 	return render_template('distributor/dhome.html', title="distributor")
 
 @distributor.route("/login", methods=['GET', 'POST'])
@@ -24,9 +44,10 @@ def login():
 
 		if(p.password == pwd):
 			nxt = request.args.get('next')
-			if(nxt): return redirect(url_for(nxt))
 			session['d_uname'] = p.username
 			session['d_pass'] = p.password
+			if(nxt): return redirect(url_for(nxt))
+			
 			return redirect(url_for('distributor.home'))
 		else:
 			flash('Invalid Credentials', 'danger')
@@ -56,3 +77,7 @@ def logout():
 	session['d_pass'] = None
 	return redirect(url_for('distributor.login'))
 	
+
+@distributor.route('/qrviewer/<qkey>')
+def qrviewer(qkey):
+	return render_template('distributor/qr.html', qr=qr.qrcode(qkey))

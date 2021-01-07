@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="container p-5">
+	<h1 class="display-1">TrashTag</h1>
+	<div class="d-flex">
+		<a href={{url_for('producer.home')}} class="btn btn-primary">Producer Home</a>
+		<a href={{url_for('distributor.home')}} class="btn btn-primary mx-1">Distributor Home</a>
+	</div>
+</div>
+{% endblock content %}
