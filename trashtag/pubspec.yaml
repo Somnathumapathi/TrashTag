@@ -26,6 +26,7 @@ dependencies:
   http:
   qr_flutter: ^3.2.0
   barcode_scan: ^2.0.1
+  toast:
 
 
   # The following adds the Cupertino Icons font to your application.

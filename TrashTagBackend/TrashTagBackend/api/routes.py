@@ -49,10 +49,12 @@ def addproduct2dubstin(uname, productkey, dustbinkey):
 	user = UserModel.query.filter_by(username=uname).first()
 	product = Product.query.filter_by(productkey=productkey).first()
 	dustbin = Dustbin.query.filter_by(dustbinkey=dustbinkey).first()
+	print(f"USERRRRR  ---> {user}")
 	if(not user or not product or not dustbin): return jsonify({'status':0, 'message':'Incorrect Information'})
 	print(f"{user} : Adding {product} --> {dustbin}")
 	product.add2dustbin(user, dustbin)
 	return jsonify({
 		'status': 200,
-		'message': 'OK'
+		'message': 'OK',
+		'coins': int(user.coins)
 	})

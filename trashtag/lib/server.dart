@@ -5,7 +5,7 @@ import 'package:http_parser/http_parser.dart';
 
 String currentUsername;
 
-String serverURL = "https://73cd93dc9605.ngrok.io";
+String serverURL = "https://691efab37ac9.ngrok.io";
 
 login(username, password) async {
   final response = await http.get('$serverURL/loginuser/$username/$password');
@@ -27,6 +27,20 @@ register(name, username, password) async {
     Map res = json.decode(response.body);
     if (res['status'] == 200) {
       return true;
+    }
+  }
+  print("Error");
+  return false;
+}
+
+add2dustbin(productKey, garbageKey) async {
+  final response = await http
+      .get('$serverURL/add2dustbin/$currentUsername/$productKey/$garbageKey');
+  print(json.decode(response.body));
+  if (response.statusCode == 200) {
+    Map res = json.decode(response.body);
+    if (res['status'] == 200) {
+      return res['coins'];
     }
   }
   print("Error");
