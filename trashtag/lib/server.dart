@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
-String currentUsername;
+String? currentUsername;
 
 String serverURL = "https://691efab37ac9.ngrok.io";
 
 login(username, password) async {
-  final response = await http.get('$serverURL/loginuser/$username/$password');
+  final response =
+      await http.get('$serverURL/loginuser/$username/$password' as Uri);
   if (response.statusCode == 200) {
     Map res = json.decode(response.body);
     if (res['status'] == 200) {
@@ -21,8 +22,8 @@ login(username, password) async {
 }
 
 register(name, username, password) async {
-  final response =
-      await http.get('$serverURL/registeruser/$name/$username/$password');
+  final response = await http
+      .get('$serverURL/registeruser/$name/$username/$password' as Uri);
   if (response.statusCode == 200) {
     Map res = json.decode(response.body);
     if (res['status'] == 200) {
@@ -34,8 +35,8 @@ register(name, username, password) async {
 }
 
 add2dustbin(productKey, garbageKey) async {
-  final response = await http
-      .get('$serverURL/add2dustbin/$currentUsername/$productKey/$garbageKey');
+  final response = await http.get(
+      '$serverURL/add2dustbin/$currentUsername/$productKey/$garbageKey' as Uri);
   print(json.decode(response.body));
   if (response.statusCode == 200) {
     Map res = json.decode(response.body);

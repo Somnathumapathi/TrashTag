@@ -1,18 +1,18 @@
-import 'package:barcode_scan/barcode_scan.dart';
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 import 'package:trashtag/server.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key key}) : super(key: key);
+  const Home({super.key});
 
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  String productKey;
-  String garbageKey;
+  String? productKey;
+  String? garbageKey;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,20 +27,22 @@ class _HomeState extends State<Home> {
             child: InkWell(
               onTap: () async {
                 //Scan Product
-                String pKey = await BarcodeScanner.scan(); //barcode scnner
+                String pKey =
+                    await BarcodeScanner.scan() as String; //barcode scnner
                 setState(() {
                   productKey = pKey;
                 });
                 //Scan Garbage
-                String gKey = await BarcodeScanner.scan(); //barcode scnner
+                String gKey =
+                    await BarcodeScanner.scan() as String; //barcode scnner
                 setState(() {
                   garbageKey = gKey;
                 });
 
                 add2dustbin(productKey, garbageKey).then((x) {
                   print("You recieved $x Coins");
-                  Toast.show("You recieved $x Coins", context,
-                      duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                  Toast.show("You recieved $x Coins",
+                      duration: Toast.lengthLong, gravity: Toast.bottom);
                 });
               },
               child: CircleAvatar(
