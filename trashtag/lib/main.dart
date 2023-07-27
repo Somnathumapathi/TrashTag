@@ -75,7 +75,7 @@ class TrashTagApp extends StatelessWidget {
                         Navigator.of(context).push(
                             MaterialPageRoute(builder: (contet) => ScanPage()));
                       },
-                      child: Text("QR Test"),
+                      child: Text("QR Scan Test"),
                     )
                   ],
                 ),
