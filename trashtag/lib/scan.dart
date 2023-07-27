@@ -1,4 +1,4 @@
-import 'package:barcode_scan/barcode_scan.dart';
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
 
 class ScanPage extends StatefulWidget {
@@ -36,11 +36,11 @@ class _ScanPageState extends State<ScanPage> {
             SizedBox(
               height: 20.0,
             ),
-            FlatButton(
-              padding: EdgeInsets.all(15.0),
+            TextButton(
+              //padding: EdgeInsets.all(15.0),
               onPressed: () async {
                 String codeSanner =
-                    await BarcodeScanner.scan(); //barcode scnner
+                    await BarcodeScanner.scan() as String; //barcode scnner
                 setState(() {
                   qrCodeResult = codeSanner;
                 });
@@ -57,9 +57,9 @@ class _ScanPageState extends State<ScanPage> {
                 style:
                     TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
               ),
-              shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Colors.blue, width: 3.0),
-                  borderRadius: BorderRadius.circular(20.0)),
+              //shape: RoundedRectangleBorder(
+              //side: BorderSide(color: Colors.blue, width: 3.0),
+              //borderRadius: BorderRadius.circular(20.0)),
             )
           ],
         ),

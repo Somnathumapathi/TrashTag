@@ -4,7 +4,7 @@ import 'package:trashtag/server.dart';
 import 'home.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -39,16 +39,16 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(
                 height: 20,
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text("Login"),
                 onPressed: () {
                   print(uc.text);
                   print(pc.text);
                   login(uc.text, pc.text).then((x) {
-                    if (x){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Home()));
-                    }
-                    else
+                    if (x) {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => Home()));
+                    } else
                       print("Incorrect");
                   });
                 },
