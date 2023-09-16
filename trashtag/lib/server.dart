@@ -1,15 +1,14 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
 
 String? currentUsername;
 
-String serverURL = "https://691efab37ac9.ngrok.io";
+String serverURL =
+    "https://b81d-2405-201-d036-284f-7c18-5161-ab9-979f.ngrok-free.app";
 
 login(username, password) async {
-  final response =
-      await http.get('$serverURL/loginuser/$username/$password' as Uri);
+  final uri = Uri.parse('$serverURL/loginuser/$username/$password');
+  final response = await http.get(uri);
   if (response.statusCode == 200) {
     Map res = json.decode(response.body);
     if (res['status'] == 200) {
@@ -22,8 +21,8 @@ login(username, password) async {
 }
 
 register(name, username, password) async {
-  final response = await http
-      .get('$serverURL/registeruser/$name/$username/$password' as Uri);
+  final uri = Uri.parse('$serverURL/registeruser/$name/$username/$password');
+  final response = await http.get(uri);
   if (response.statusCode == 200) {
     Map res = json.decode(response.body);
     if (res['status'] == 200) {
@@ -35,8 +34,9 @@ register(name, username, password) async {
 }
 
 add2dustbin(productKey, garbageKey) async {
-  final response = await http.get(
-      '$serverURL/add2dustbin/$currentUsername/$productKey/$garbageKey' as Uri);
+  final uri = Uri.parse(
+      '$serverURL/add2dustbin/$currentUsername/$productKey/$garbageKey');
+  final response = await http.get(uri);
   print(json.decode(response.body));
   if (response.statusCode == 200) {
     Map res = json.decode(response.body);
@@ -47,22 +47,3 @@ add2dustbin(productKey, garbageKey) async {
   print("Error");
   return false;
 }
-
-// register(username, password, email) async {
-//   final response = await http.post(
-//     '$serverURL/register',
-//     headers: <String, String>{
-//       'Content-Type': 'application/json; charset=UTF-8',
-//     },
-//     body: jsonEncode(<String, String>{
-//       'username': username,
-//       'password': password,
-//       'email': email
-//     }),
-//   );
-//   if (response.statusCode == 200) {
-//     Map obj = json.decode(response.body);
-//     if (obj['code'] == 'S1') return obj;
-//   }
-//   return {'code': 'ERR'};
-// }
